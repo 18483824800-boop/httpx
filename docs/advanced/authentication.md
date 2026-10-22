@@ -84,6 +84,16 @@ or fallback to the default.
 
 The `NetRCAuth()` class uses [the `netrc.netrc()` function from the Python standard library](https://docs.python.org/3/library/netrc.html). See the documentation there for more details on exceptions that may be raised if the `.netrc` file is not found, or cannot be parsed.
 
+## Authentication and redirects
+
+HTTPX keeps the `Authorization` header across redirects that stay on the same origin (same scheme, host, and port).
+
+If the redirect target is a different origin, the `Authorization` header is stripped from the redirected request. That stops credentials from being forwarded to an unexpected host.
+
+The only exception is a direct HTTP-to-HTTPS upgrade on the same host (port 80 to 443). In that case the header is kept.# 唯一例外的是http->https，这只是升级安全连接时，凭证给的是同一个网站的时候，验证头可以保留。
+
+If you need credentials on a cross-origin redirect target, either disable automatic redirects with `follow_redirects=False` and issue the next request yourself, or re-apply authentication in a custom `httpx.Auth` flow.
+
 ## Custom authentication schemes
 
 When issuing requests or instantiating a client, the `auth` argument can be used to pass an authentication scheme to use. The `auth` argument may be one of the following...

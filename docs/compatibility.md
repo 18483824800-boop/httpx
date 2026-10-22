@@ -25,6 +25,8 @@ Or else instantiate a client, with redirect following enabled by default...
 client = httpx.Client(follow_redirects=True)
 ```
 
+When following redirects, HTTPX strips the `Authorization` header if the target is a different origin. Same-origin redirects keep it, as does a direct `http`->`https` upgrade on the same host. See [Authentication and redirects](advanced/authentication.md#authentication-and-redirects).
+
 ## Client instances
 
 The HTTPX equivalent of `requests.Session` is `httpx.Client`.
