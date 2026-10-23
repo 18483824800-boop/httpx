@@ -235,7 +235,14 @@ def test_request_params():
     request = httpx.Request(
         "GET", "http://example.com?c=3", params={"a": "1", "b": "2"}
     )
-    assert str(request.url) == "http://example.com?a=1&b=2"
+    assert str(request.url) == "http://example.com?c=3&a=1&b=2"
 
     request = httpx.Request("GET", "http://example.com?a=1", params={})
-    assert str(request.url) == "http://example.com"
+    assert str(request.url) == "http://example.com?a=1"
+
+def test_request_params_merge_with_url_query():
+    """测试 params 和 URL 原有查询参数是否合并"""
+    request = httpx.Request(
+        "GET", "http://example.com?c=3", params={"a": "1", "b": "2"}
+    )
+    assert str(request.url) == "http://example.com?c=3&a=1&b=2"
